@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sqflite_example/common_widgets/age_slider.dart';
 import 'package:flutter_sqflite_example/common_widgets/breed_selector.dart';
 import 'package:flutter_sqflite_example/common_widgets/color_picker.dart';
+import 'package:flutter_sqflite_example/models/breed.dart';
+import 'package:flutter_sqflite_example/models/dog.dart';
 
 class DogFormPage extends StatefulWidget {
-  const DogFormPage({Key? key}) : super(key: key);
+  const DogFormPage({Key? key, this.dog}) : super(key: key);
+  final Dog? dog;
 
   @override
   _DogFormPageState createState() => _DogFormPageState();
@@ -20,15 +23,27 @@ class _DogFormPageState extends State<DogFormPage> {
     Color(0xFF862F07),
     Color(0xFF2F1B15),
   ];
-  static final List<String> _breeds = [];
+  static final List<Breed> _breeds = [];
 
   int _selectedAge = 0;
   int _selectedColor = 0;
   int _selectedBreed = 0;
 
-  Future<List<String>> _getBreeds() async {
-    // Code here
+  @override
+  void initState() {
+    super.initState();
+    if (widget.dog != null) {
+      _nameController.text = widget.dog!.name;
+      _selectedAge = widget.dog!.age;
+      _selectedColor = _colors.indexOf(widget.dog!.color);
+    }
+  }
 
+  Future<List<Breed>> _getBreeds() async {
+    // Code here
+    if (widget.dog != null) {
+      _selectedBreed = _breeds.indexWhere((e) => e.id == widget.dog!.breedId);
+    }
     return _breeds;
   }
 
@@ -83,14 +98,14 @@ class _DogFormPageState extends State<DogFormPage> {
             ),
             SizedBox(height: 24.0),
             // Breed Selector
-            FutureBuilder<List<String>>(
+            FutureBuilder<List<Breed>>(
               future: _getBreeds(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Text("Loading breeds...");
                 }
                 return BreedSelector(
-                  breeds: _breeds,
+                  breeds: _breeds.map((e) => e.name).toList(),
                   selectedIndex: _selectedBreed,
                   onChanged: (value) {
                     setState(() {
