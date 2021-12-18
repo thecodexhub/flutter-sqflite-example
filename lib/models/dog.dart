@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 
 class Dog {
-  final int id;
+  final int? id;
   final String name;
   final int age;
   final Color color;
   final int breedId;
 
   Dog({
-    required this.id,
+    this.id,
     required this.name,
     required this.age,
     required this.color,

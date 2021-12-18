@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 class Breed {
-  final int id;
+  final int? id;
   final String name;
   final String description;
 
   Breed({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
   });
