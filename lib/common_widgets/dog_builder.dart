@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite_example/models/dog.dart';
-import 'package:flutter_sqflite_example/pages/dog_form_page.dart';
+import 'package:flutter_sqflite_example/services/database_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DogBuilder extends StatelessWidget {
   const DogBuilder({
     Key? key,
     required this.future,
+    required this.onEdit,
     required this.onDelete,
   }) : super(key: key);
   final Future<List<Dog>> future;
+  final Function(Dog) onEdit;
   final Function(Dog) onDelete;
+
+  Future<String> getBreedName(int id) async {
+    final DatabaseService _databaseService = DatabaseService();
+    final breed = await _databaseService.breed(id);
+    return breed.name;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +73,12 @@ class DogBuilder extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 4.0),
-                  Text('Breed: ${dog.breedId}'),
+                  FutureBuilder<String>(
+                    future: getBreedName(dog.breedId),
+                    builder: (context, snapshot) {
+                      return Text('Breed: ${snapshot.data}');
+                    },
+                  ),
                   SizedBox(height: 4.0),
                   Row(
                     children: [
@@ -89,11 +102,7 @@ class DogBuilder extends StatelessWidget {
             ),
             SizedBox(width: 20.0),
             GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => DogFormPage(dog: dog)),
-                );
-              },
+              onTap: () => onEdit(dog),
               child: Container(
                 height: 40.0,
                 width: 40.0,

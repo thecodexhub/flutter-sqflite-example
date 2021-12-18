@@ -5,6 +5,7 @@ import 'package:flutter_sqflite_example/models/breed.dart';
 import 'package:flutter_sqflite_example/models/dog.dart';
 import 'package:flutter_sqflite_example/pages/breed_form_page.dart';
 import 'package:flutter_sqflite_example/pages/dog_form_page.dart';
+import 'package:flutter_sqflite_example/services/database_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,22 +16,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final DatabaseService _databaseService = DatabaseService();
+
   Future<List<Dog>> _getDogs() async {
-    // Remove this line -->
-    await Future.delayed(Duration(seconds: 2));
-    // Add code here
-    return [];
+    return await _databaseService.dogs();
   }
 
   Future<List<Breed>> _getBreeds() async {
-    // Remove this line -->
-    await Future.delayed(Duration(seconds: 2));
-    // Add code here
-    return [];
+    return await _databaseService.breeds();
   }
 
-  Future<void> _onDogDelete(Dog dog) {
-    return Future.value();
+  Future<void> _onDogDelete(Dog dog) async {
+    await _databaseService.deleteDog(dog.id!);
+    setState(() {});
   }
 
   @override
@@ -58,6 +56,18 @@ class _HomePageState extends State<HomePage> {
           children: [
             DogBuilder(
               future: _getDogs(),
+              onEdit: (value) {
+                {
+                  Navigator.of(context)
+                      .push(
+                        MaterialPageRoute(
+                          builder: (_) => DogFormPage(dog: value),
+                          fullscreenDialog: true,
+                        ),
+                      )
+                      .then((_) => setState(() {}));
+                }
+              },
               onDelete: _onDogDelete,
             ),
             BreedBuilder(
@@ -70,12 +80,14 @@ class _HomePageState extends State<HomePage> {
           children: [
             FloatingActionButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => BreedFormPage(),
-                    fullscreenDialog: true,
-                  ),
-                );
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                        builder: (_) => BreedFormPage(),
+                        fullscreenDialog: true,
+                      ),
+                    )
+                    .then((_) => setState(() {}));
               },
               heroTag: 'addBreed',
               child: FaIcon(FontAwesomeIcons.plus),
@@ -83,12 +95,14 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 12.0),
             FloatingActionButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => DogFormPage(),
-                    fullscreenDialog: true,
-                  ),
-                );
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                        builder: (_) => DogFormPage(),
+                        fullscreenDialog: true,
+                      ),
+                    )
+                    .then((_) => setState(() {}));
               },
               heroTag: 'addDog',
               child: FaIcon(FontAwesomeIcons.paw),

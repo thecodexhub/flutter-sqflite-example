@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sqflite_example/models/breed.dart';
+import 'package:flutter_sqflite_example/services/database_service.dart';
 
 class BreedFormPage extends StatefulWidget {
   const BreedFormPage({Key? key}) : super(key: key);
@@ -11,11 +13,16 @@ class _BreedFormPageState extends State<BreedFormPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
+  final DatabaseService _databaseService = DatabaseService();
+
   Future<void> _onSave() async {
     final name = _nameController.text;
     final description = _descController.text;
 
-    // Add save code here
+    await _databaseService
+        .insertBreed(Breed(name: name, description: description));
+
+    Navigator.pop(context);
   }
 
   @override

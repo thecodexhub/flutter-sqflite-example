@@ -4,6 +4,7 @@ import 'package:flutter_sqflite_example/common_widgets/breed_selector.dart';
 import 'package:flutter_sqflite_example/common_widgets/color_picker.dart';
 import 'package:flutter_sqflite_example/models/breed.dart';
 import 'package:flutter_sqflite_example/models/dog.dart';
+import 'package:flutter_sqflite_example/services/database_service.dart';
 
 class DogFormPage extends StatefulWidget {
   const DogFormPage({Key? key, this.dog}) : super(key: key);
@@ -25,6 +26,8 @@ class _DogFormPageState extends State<DogFormPage> {
   ];
   static final List<Breed> _breeds = [];
 
+  final DatabaseService _databaseService = DatabaseService();
+
   int _selectedAge = 0;
   int _selectedColor = 0;
   int _selectedBreed = 0;
@@ -40,7 +43,8 @@ class _DogFormPageState extends State<DogFormPage> {
   }
 
   Future<List<Breed>> _getBreeds() async {
-    // Code here
+    final breeds = await _databaseService.breeds();
+    if (_breeds.length == 0) _breeds.addAll(breeds);
     if (widget.dog != null) {
       _selectedBreed = _breeds.indexWhere((e) => e.id == widget.dog!.breedId);
     }
@@ -49,10 +53,26 @@ class _DogFormPageState extends State<DogFormPage> {
 
   Future<void> _onSave() async {
     final name = _nameController.text;
+    final age = _selectedAge;
     final color = _colors[_selectedColor];
     final breed = _breeds[_selectedBreed];
 
     // Add save code here
+    widget.dog == null
+        ? await _databaseService.insertDog(
+            Dog(name: name, age: age, color: color, breedId: breed.id!),
+          )
+        : await _databaseService.updateDog(
+            Dog(
+              id: widget.dog!.id,
+              name: name,
+              age: age,
+              color: color,
+              breedId: breed.id!,
+            ),
+          );
+
+    Navigator.pop(context);
   }
 
   @override
