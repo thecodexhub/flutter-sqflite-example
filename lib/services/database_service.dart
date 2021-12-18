@@ -27,7 +27,12 @@ class DatabaseService {
 
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    return await openDatabase(path, onCreate: _onCreate, version: 1);
+    return await openDatabase(
+      path,
+      onCreate: _onCreate,
+      version: 1,
+      onConfigure: (db) async => await db.execute('PRAGMA foreign_keys = ON'),
+    );
   }
 
   // When the database is first created, create a table to store breeds
@@ -39,7 +44,7 @@ class DatabaseService {
     );
     // Run the CREATE {dogs} TABLE statement on the database.
     await db.execute(
-      'CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER, color INTEGER, FOREIGN KEY(breedId) REFERENCES breeds(id) ON DELETE SET NULL)',
+      'CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER, color INTEGER, breedId INTEGER, FOREIGN KEY (breedId) REFERENCES breeds(id) ON DELETE SET NULL)',
     );
   }
 
