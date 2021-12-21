@@ -1,16 +1,26 @@
-# flutter_sqflite_example
+# Flutter Sqflite Example
 
-A new Flutter project.
+Flutter SQLite Database - Persist Data with [sqflite](https://pub.dev/packages/sqflite). Learn how to use sqflite to store complex relational data locally in Flutter apps.
+
+This project shows - 
+- how to initialize sqflite local database.
+- how to create multiple relational tables with primary and foreign key.
+- how to insert data into the table.
+- how to retrieve, modify and remove data from the table.
+- how to display data in UI using FutureBuilder.
+
+### Read the article [here on Medium]().
+
+### Check the sample video [here on Instagram]().
+
+## Preview
+
+<img src="screenshots/ss.png" />
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+### If you like this repository, kindly give it a star ⭐
