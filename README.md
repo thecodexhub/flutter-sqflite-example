@@ -9,9 +9,9 @@ This project shows -
 - how to retrieve, modify and remove data from the table.
 - how to display data in UI using FutureBuilder.
 
-### Read the article [here on Medium]().
+### Read the article [here on Medium](https://medium.com/@thecodexhubofficial/flutter-sqlite-database-persist-data-with-sqflite-74283c51b9a2).
 
-### Check the sample video [here on Instagram]().
+### Check the sample video [here on Instagram](https://www.instagram.com/p/CXwDnyZjyGx/?utm_source=ig_web_copy_link).
 
 ## Preview
 
